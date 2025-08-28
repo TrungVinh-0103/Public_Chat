@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModernChat</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="chat-body">
+  <div class="chat-app">
+    <!-- Enhanced Sidebar -->
+    <div class="chat-sidebar" id="chatSidebar">
+      <div class="sidebar-header">
+        <div class="brand-mini">
+          <div class="logo-mini">
+            <i class="fas fa-comments"></i>
+          </div>
+          <h3 class="brand-title">ModernChat</h3>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      
+      <div class="user-profile">
+        <div class="user-avatar-container">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="status-indicator online"></div>
+        </div>
+        <div class="user-info">
+          <h4 class="user-name" id="currentUserName">User</h4>
+          <p class="user-status">
+            <i class="fas fa-circle status-dot"></i>
+            <span>Đang hoạt động</span>
+          </p>
+        </div>
+      </div>
+      
+      <!-- Chat rooms/contacts section -->
+      <div class="chat-rooms">
+        <div class="section-header">
+          <h5>Phòng chat</h5>
+          <button class="add-room-btn">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+        <div class="room-list">
+          <div class="room-item active">
+            <div class="room-avatar">
+              <i class="fas fa-globe"></i>
+            </div>
+            <div class="room-info">
+              <h6>Phòng công khai</h6>
+              <p class="room-last-message">Tin nhắn mới nhất...</p>
+            </div>
+            <div class="room-meta">
+              <span class="room-time">12:30</span>
+              <div class="unread-badge">3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="sidebar-footer">
+        <button class="sidebar-btn settings-btn">
+          <i class="fas fa-cog"></i>
+          <span>Cài đặt</span>
+        </button>
+        <button class="sidebar-btn logout-btn" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Đăng xuất</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Main Chat Area -->
+    <div class="chat-main">
+      <!-- Enhanced Chat Header -->
+      <div class="chat-header">
+        <div class="chat-header-left">
+          <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="chat-avatar">
+            <i class="fas fa-globe"></i>
+          </div>
+          <div class="chat-info">
+            <h3 class="chat-title">Phòng chat công khai</h3>
+            <p class="chat-subtitle">
+              <i class="fas fa-users"></i>
+              <span id="onlineCount">1</span> người đang online
+            </p>
+          </div>
+        </div>
+        <div class="chat-header-right">
+          <button class="header-btn search-btn">
+            <i class="fas fa-search"></i>
+          </button>
+          <button class="header-btn info-btn">
+            <i class="fas fa-info-circle"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Enhanced Chat Messages -->
+      <div class="chat-messages-container">
+        <div id="chatBox" class="chat-messages">
+          <!-- Messages will be inserted here -->
+        </div>
+        <button class="scroll-to-bottom" id="scrollToBottom">
+          <i class="fas fa-chevron-down"></i>
+        </button>
+      </div>
+      
+      <!-- Enhanced Chat Input -->
+      <div class="chat-input-area">
+        <!-- File/Media Preview -->
+        <div id="mediaPreview" class="media-preview d-none">
+          <div class="preview-content">
+            <div class="preview-media"></div>
+            <div class="preview-actions">
+              <button class="preview-remove" id="removeMedia">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Voice Recording Preview -->
+        <div id="voicePreview" class="voice-preview d-none">
+          <div class="voice-content">
+            <div class="voice-visualizer">
+              <div class="voice-icon">
+                <i class="fas fa-microphone"></i>
+              </div>
+              <div class="voice-waveform">
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+              </div>
+              <span class="voice-duration">0:00</span>
+            </div>
+            <button class="voice-remove" id="removeVoice">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Main Input -->
+        <div class="chat-input-container">
+          <div class="input-actions-left">
+            <button class="input-btn attach-btn" id="attachBtn" title="Đính kèm file">
+              <i class="fas fa-paperclip"></i>
+            </button>
+            <button class="input-btn emoji-btn" id="emojiBtn" title="Emoji">
+              <i class="fas fa-smile"></i>
+            </button>
+          </div>
+          
+          <div class="message-input-wrapper">
+            <textarea id="messageInput" class="message-input" placeholder="Nhập tin nhắn..." rows="1"></textarea>
+          </div>
+          
+          <div class="input-actions-right">
+            <button class="input-btn voice-btn" id="recordBtn" title="Ghi âm">
+              <i class="fas fa-microphone"></i>
+            </button>
+            <button class="input-btn voice-btn recording d-none" id="stopRecordBtn" title="Dừng ghi âm">
+              <i class="fas fa-stop"></i>
+            </button>
+            <button class="send-btn" id="sendBtn">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Enhanced Emoji Picker -->
+        <div id="emojiPicker" class="emoji-picker d-none">
+          <div class="emoji-header">
+            <div class="emoji-tabs">
+              <button class="emoji-tab active" data-category="recent">
+                <i class="fas fa-clock"></i>
+              </button>
+              <button class="emoji-tab" data-category="smileys">
+                <i class="fas fa-smile"></i>
+              </button>
+              <button class="emoji-tab" data-category="people">
+                <i class="fas fa-user"></i>
+              </button>
+              <button class="emoji-tab" data-category="nature">
+                <i class="fas fa-leaf"></i>
+              </button>
+              <button class="emoji-tab" data-category="objects">
+                <i class="fas fa-lightbulb"></i>
+              </button>
+            </div>
+            <button class="emoji-close" id="closeEmoji">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="emoji-content">
+            <div class="emoji-grid" id="emojiGrid">
+              <!-- Emojis will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+        
+        <input type="file" id="fileInput" accept="image/*,video/*,audio/*" class="d-none" multiple>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile overlay -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8/dist/umd/supabase.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
