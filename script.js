@@ -30,6 +30,31 @@ document.addEventListener("DOMContentLoaded", () => {
       togglePassword.innerHTML = type === "password" ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>'
     })
 
+    // Google Login
+const googleLoginBtn = document.getElementById("googleLoginBtn")
+if (googleLoginBtn) {
+  googleLoginBtn.addEventListener("click", async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + "/chat.html", // sau khi login xong sẽ chuyển đến chat.html
+        },
+      })
+      if (error) {
+        console.error("Google login error:", error)
+        showError("Đăng nhập Google thất bại!")
+      } else {
+        console.log("Redirecting to Google login...")
+      }
+    } catch (err) {
+      console.error("Unexpected Google login error:", err)
+      showError("Có lỗi xảy ra khi đăng nhập Google!")
+    }
+  })
+}
+
+
     // Enhanced form validation and submission
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault()
@@ -163,19 +188,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Enhanced authentication state management
     supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        currentUser = session.user
-        const userNameElement = document.getElementById("currentUserName")
-        if (userNameElement) {
-          userNameElement.textContent = currentUser.email.split("@")[0]
-        }
-        initializeChat()
-        updateOnlineStatus(true)
-        console.log("User authenticated:", currentUser.email)
-      } else {
-        window.location.href = "index.html"
-      }
-    })
+  if (session) {
+    currentUser = session.user
+
+    const userNameElement = document.getElementById("currentUserName")
+    const userAvatar = document.getElementById("currentUserAvatar")
+
+    const displayName = currentUser.user_metadata?.full_name || currentUser.email
+    const avatarUrl = currentUser.user_metadata?.avatar_url
+
+    if (userNameElement) {
+      userNameElement.textContent = displayName
+    }
+    if (userAvatar && avatarUrl) {
+      userAvatar.src = avatarUrl
+    }
+
+    initializeChat()
+    updateOnlineStatus(true)
+    console.log("User authenticated:", displayName)
+  } else {
+    window.location.href = "index.html"
+  }
+})
 
     // Initialize chat functionality
     function initializeChat() {
