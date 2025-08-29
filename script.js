@@ -38,9 +38,10 @@ if (googleLoginBtn) {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: window.location.origin + "/chat.html", // sau khi login xong sẽ chuyển đến chat.html
+          redirectTo: "https://trungvinh-0103.github.io/Public_Chat/chat.html",
         },
       })
+
       if (error) {
         console.error("Google login error:", error)
         showError("Đăng nhập Google thất bại!")
